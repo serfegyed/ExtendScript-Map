@@ -51,9 +51,14 @@ function Map(iterable) {
     this._data = {};
     this.size = 0;
 
-    if (iterable) {
-        this.from(iterable);
-    }
+    if (Array.isArray(iterable)) {
+        for (var i = 0; i < iterable.length; i++) {
+            var entry = iterable[i];
+            if (Array.isArray(entry)) {
+                this.set(entry[0], entry[1]);
+            };
+        };
+    };
 }
 
 /**
