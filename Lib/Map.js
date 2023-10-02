@@ -1,5 +1,3 @@
-#include '..\\External\\external.js';
-
 /*************************************************************************************/
 /**
  * @description Map class - ExtendScript (ES3)
@@ -35,7 +33,7 @@
  * - reduce()   - Reduce the Map to a single value by applying a callback function to each key-value pair.
  * - from()     - Adds elements to the map from an iterable.
  * 
- * @external:   isString(), sameValueZero(), Array.isArray()
+ * @external:   sameValueZero()
  * 
  */
 /*************************************************************************************/
@@ -51,15 +49,15 @@ function Map(iterable) {
     this._data = {};
     this.size = 0;
 
-    if (Array.isArray(iterable)) {
+    if (typeof iterable === 'object' && iterable instanceof Array) {
         for (var i = 0; i < iterable.length; i++) {
             var entry = iterable[i];
-            if (Array.isArray(entry)) {
+            if (typeof entry === 'object' && entry instanceof Array) {
                 this.set(entry[0], entry[1]);
             };
         };
     };
-}
+};
 
 /**
  * Checks if an object is a Map.
@@ -234,31 +232,15 @@ Map.prototype.entries = function () {
 };
 
 /**
- * Converts a Map object to an array based on the specified mode.
+ * Converts a Map object to an array.
  *
- * @param {string} mode - The mode to determine which elements to include in the array. 
- *                        Valid values are 'keys', 'values'. If not specified, full entries are used.
  * @return {Array} The resulting array containing the elements of the Map object.
  */
-Map.prototype.toArray = function (mode) {
-    mode = (mode === 'keys' || mode === 'values' ? mode : undefined);
+Map.prototype.toArray = function () {
     var array = [];
-
-    var iterator;
-    if (mode === 'keys') {
-        iterator = this.keys();
-    } else if (mode === 'values') {
-        iterator = this.values();
-    } else {
-        iterator = this.entries();
+    for (var key in this._data) {
+        array.push([key, this._data[key]])
     }
-
-    var currentValue = iterator.next();
-    while (!currentValue.done) {
-        array.push(currentValue.value);
-        currentValue = iterator.next();
-    }
-
     return array;
 };
 
@@ -275,7 +257,7 @@ Map.prototype.toString = function () {
             if (!isFirst) {
                 string += ", ";
             }
-            string += "{" + key + "=>" + (isString(this._data[key]) ? '"' + this._data[key] + '"' : this._data[key]) + "}";
+            string += "{" + key + "=>" + (typeof this._data[key] === "string" ? '"' + this._data[key] + '"' : this._data[key]) + "}";
             isFirst = false;
         }
     }
@@ -569,30 +551,28 @@ Map.prototype.from = function (iterable) {
     }
 
     if (typeof iterable === "object") {
-        if (Array.isArray(iterable)) {
-            for (var i = 0; i < iterable.length; i++) {
-                var entry = iterable[i];
-                if (Array.isArray(entry)) {
-                    this.set(entry[0], entry[1]);
-                }
-            }
-
-        } else if (iterable instanceof Map) {
-            var iterator = iterable.entries();
-            var entry = iterator.next();
-            while (!entry.done) {
-                this.set(entry.value[0], entry.value[1]);
-                entry = iterator.next();
-            }
-
-        } else {
-            for (var key in iterable) {
-                if (iterable.hasOwnProperty(key)) {
-                    this.set(key, iterable[key]);
-                }
+        for (var i = 0; i < iterable.length; i++) {
+            var entry = iterable[i];
+            if (typeof entry === 'object' && entry instanceof Array) {
+                this.set(entry[0], entry[1]);
             }
         }
-    }
+
+    } else if (iterable instanceof Map) {
+        var iterator = iterable.entries();
+        var entry = iterator.next();
+        while (!entry.done) {
+            this.set(entry.value[0], entry.value[1]);
+            entry = iterator.next();
+        }
+
+    } else {
+        for (var key in iterable) {
+            if (iterable.hasOwnProperty(key)) {
+                this.set(key, iterable[key]);
+            }
+        }
+    };
 
     return this;
 };

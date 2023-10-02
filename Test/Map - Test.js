@@ -113,10 +113,6 @@ while (!(result = entriesIterator.next()).done) {
 $.writeln("\nTest the 'toArray' method");
 $.writeln("toArray method");
 $.writeln(myMap.toArray()); // Output: [["key1", "value1"], ["key2", "value2"], ["key3", "value3"]]
-$.writeln("toArray method with 'keys' parameter");
-$.writeln(myMap.toArray('keys')); // Output: ["key1", "key2", "key3"]
-$.writeln("toArray method with 'values' parameter");
-$.writeln(myMap.toArray('values')); // Output: ["value1", "value2", "value3"]
 
 $.writeln("\nTest the 'toString' method");
 $.writeln("toString method");
