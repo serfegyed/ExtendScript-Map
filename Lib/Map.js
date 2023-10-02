@@ -49,10 +49,10 @@ function Map(iterable) {
     this._data = {};
     this.size = 0;
 
-    if (typeof iterable === 'object' && iterable instanceof Array) {
+    if (iterable instanceof Array) {
         for (var i = 0; i < iterable.length; i++) {
             var entry = iterable[i];
-            if (typeof entry === 'object' && entry instanceof Array) {
+            if (entry instanceof Array) {
                 this.set(entry[0], entry[1]);
             };
         };
@@ -66,7 +66,7 @@ function Map(iterable) {
  * @return {boolean} Returns true if the object is a Map, otherwise returns false.
  */
 Map.isMap = function (obj) {
-    return typeof obj === "object" && obj instanceof Map;
+    return obj instanceof Map;
 };
 
 /**
@@ -550,10 +550,10 @@ Map.prototype.from = function (iterable) {
         throw new TypeError(iterable + " is not an object.");
     }
 
-    if (typeof iterable === "object") {
+    if (iterable instanceof Array) {
         for (var i = 0; i < iterable.length; i++) {
             var entry = iterable[i];
-            if (typeof entry === 'object' && entry instanceof Array) {
+            if (entry instanceof Array) {
                 this.set(entry[0], entry[1]);
             }
         }

@@ -30,10 +30,10 @@ function Map(iterable) {
     this._data = {};
     this.size = 0;
 
-    if (typeof iterable === 'object' && iterable instanceof Array) {
+    if (iterable instanceof Array) {
         for (var i = 0; i < iterable.length; i++) {
             var entry = iterable[i];
-            if (typeof entry === 'object' && entry instanceof Array) {
+            if (entry instanceof Array) {
                 this.set(entry[0], entry[1]);
             };
         };
