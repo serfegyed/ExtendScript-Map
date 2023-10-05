@@ -1,37 +1,46 @@
+#include '..\\External\\external.js';
+
 /*************************************************************************************/
 /**
  * @description Map class - ExtendScript (ES3)
- *
- * A lightweight Map class.
- *
+ * 
+ * An extended version of the Map class. 
+ * Includes all standard ES6 Map methods, as well as some mostly Array-like methods 
+ * from some stage of the tc39 proposal phase. Also two useful methods: toArray() and toSring(). 
+ * 
  * @author Egyed Serf
  * @license MIT
  *
- * Methods for the Map class:
- * - isMap()    - Checks if an object is a Map.
- * - isEmpty()  - Determines whether the given parameter is an empty Map.
- * - set()      - Sets the value of a key in the map.
+ * Properties for the Map class:
+ * - size       - Returns the number of key-value pairs in the map.
+ 
+ * Standard ethods for the Map class:
+ * - clear()    - Clears the map.
+ * - delete()   - Deletes a key-value pair from the map.
+ * - entries()  - Returns a new iterator object that contains the key/value pairs in the map.
+ * - forEach()  - Iterates through each element of the map and applies a callback function.
  * - get()      - Retrieves a value from the map's data using the provided key.
  * - has()      - Checks if the given key exists in the map's data.
- * - delete()   - Deletes a key-value pair from the map.
- * - clear()    - Clears the map.
  * - keys()     - Returns a new iterator object that contains the keys in the map.
+ * - set()      - Sets the value of a key in the map.
  * - values()   - Returns a new iterator object that contains the values in the map.
- * - entries()  - Returns a new iterator object that contains the key/value pairs in the map.
- * - toArray()  - Returns an array representation of the map.
- * - toString() - Returns a string representation of the map.
- * - forEach()  - Iterates through each element of the map and applies a callback function.
- * - includes() - Checks if the map instance includes a specific element.
- * - find()     - Finds the first element in the map that satisfies the provided testing function.
- * - findKey()  - Find the key that satisfies the given condition in the map.
- * - keyOf()    - Returns the first key associated with the specified search element in the map.
- * - some()     - Executes the provided callback function once for each key-value pair in the Map object.
+
+ * Non-standardethods:
  * - every()    - Iterates over all key-value pairs in the map and applies the given function to each pair.
  * - filter()   - Filters the elements of a Map object based on a provided callback function.
- * - mapValues()- Maps each value of the Map object using a callback function.
- * - mapKeys()  - Maps the keys of the map using a callback function.
- * - reduce()   - Reduce the Map to a single value by applying a callback function to each key-value pair.
+ * - find()     - Finds the first element in the map that satisfies the provided testing function.
+ * - findKey()  - Find the key that satisfies the given condition in the map.
  * - from()     - Adds elements to the map from an iterable.
+ * - includes() - Checks if the map instance includes a specific element.
+ * - isEmpty()  - Determines whether the given parameter is an empty Map.
+ * - isMap()    - Checks if an object is a Map.
+ * - keyOf()    - Returns the first key associated with the specified search element in the map.
+ * - mapKeys()  - Maps the keys of the map using a callback function.
+ * - mapValues()- Maps each value of the Map object using a callback function.
+ * - reduce()   - Reduce the Map to a single value by applying a callback function to each key-value pair.
+ * - some()     - Executes the provided callback function once for each key-value pair in the Map object.
+ * - toArray()  - Returns an array representation of the map.
+ * - toString() - Returns a string representation of the map.
  * 
  * @external:   sameValueZero()
  * 
@@ -281,6 +290,7 @@ Map.prototype.forEach = function (callback, thisArg) {
  *
  * @param {any} searchElement - The element to search for in the Map.
  * @return {boolean} Returns true if the element is found in the Map, otherwise returns false.
+ * @external Map.prototype.values, sameValueZero()
  */
 Map.prototype.includes = function (searchElement) {
     if (!arguments.length) throw new TypeError('Map.includes(): Missing search element')
@@ -299,9 +309,12 @@ Map.prototype.includes = function (searchElement) {
 /**
  * Finds the first element in the map that satisfies the provided testing function.
  *
- * @param {function} callback - The testing function. It is called with three arguments: the value, the key, and the map itself.
+ * @param {function} callback - The testing function. It is called with three arguments: 
+ *          the value, the key, and the map itself.
  * @param {any} thisArg - Optional. The object to use as `this` when executing the testing function.
- * @return {any} The first element in the map that satisfies the provided testing function. If no element is found, `undefined` is returned.
+ * @return {any} The first element in the map that satisfies the provided testing function. 
+ *              If no element is found, `undefined` is returned.
+ * @external Map.prototype.entries
  */
 Map.prototype.find = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -325,6 +338,7 @@ Map.prototype.find = function (callback, thisArg) {
  * @param {function} callback - The condition function to be satisfied by the value, key, and map.
  * @param {object} thisArg - The value to use as "this" when executing the condition function.
  * @return {any} The key that satisfies the condition, or undefined if no key is found.
+ * @external Map.prototype.entries
  */
 Map.prototype.findKey = function (fn, thisArg) {
     var iterator = this.entries();
@@ -345,6 +359,7 @@ Map.prototype.findKey = function (fn, thisArg) {
  *
  * @param {any} searchElement - The element to search for in the map.
  * @return {any} The key associated with the search element, or undefined if the element is not found.
+ * @external Map.prototype.entries, sameValueZero()
  */
 Map.prototype.keyOf = function (searchElement) {
     var iterator = this.entries();
@@ -367,6 +382,7 @@ Map.prototype.keyOf = function (searchElement) {
  * @param {Function} callback - Function to execute for each element.
  * @param {Object} [thisArg] - Value to use as this when executing callback.
  * @return {boolean} Returns true if the callback function returns a truthy value for at least one key-value pair, otherwise false.
+ * @external Map.prototype.entries
  */
 Map.prototype.some = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -395,6 +411,7 @@ Map.prototype.some = function (callback, thisArg) {
  * @param {Object} thisArg - Optional. The value to use as this when executing the function.
  * @return {boolean} Returns true if the function returns true for all key-value pairs,
  *                   otherwise returns false.
+ * @external Map.prototype.entries
  */
 Map.prototype.every = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -424,6 +441,7 @@ Map.prototype.every = function (callback, thisArg) {
  * @param {Object} thisArg - Optional. The value to use as `this` when executing the callback function.
  * @return {Map} A new Map object containing the key-value pairs that passed the test
  *          implemented by the callback function.
+ * @external Map.prototype.entries
  */
 Map.prototype.filter = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -452,6 +470,7 @@ Map.prototype.filter = function (callback, thisArg) {
  * @param {Object} [thisArg] - An optional object to which the this keyword can refer inside the callback function.
  * @throws {TypeError} If the callback parameter is not a function.
  * @return {Map} A new Map object with the mapped values.
+ * @external Map.prototype.entries
  */
 Map.prototype.mapValues = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -476,6 +495,7 @@ Map.prototype.mapValues = function (callback, thisArg) {
  * @param {function} callback - The callback function to apply to each key-value pair. The callback function takes three arguments: key, value, and the original map.
  * @param {Object} thisArg - An optional object to which the `this` keyword can refer inside the callback function.
  * @return {Map} - A new map with the updated keys.
+ * @external Map.prototype.entries
  */
 Map.prototype.mapKeys = function (callback, thisArg) {
     if (typeof callback !== "function")
@@ -506,6 +526,7 @@ Map.prototype.mapKeys = function (callback, thisArg) {
  * @param {*} initialValue - A value to use as the first argument to the first call of the callback.
  * @return {*} - The value that results from the reduction.
  * @throws {TypeError} - If the callback is not a function or if the Map is empty and no initialValue is provided.
+ * @external Map.prototype.entries
  */
 Map.prototype.reduce = function (callback, initialValue) {
     if (typeof callback !== "function")
@@ -544,6 +565,7 @@ Map.prototype.reduce = function (callback, initialValue) {
  * @throws {TypeError} If the iterable is not an object.
  * @throws {TypeError} If the iterable contains invalid entries.
  * @return {Map} The map instance with the values from the iterable.
+ * @external Map.prototype.entries
  */
 Map.prototype.from = function (iterable) {
     if (iterable === null || iterable === undefined) {

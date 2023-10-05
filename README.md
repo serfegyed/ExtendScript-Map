@@ -46,7 +46,5 @@ This Map class is an implementation of the JavaScript built-in Map object.
  
 ## Externals   
 
-* `isString()`      - Checks if a value is a string.  
 * `sameValueZero()` - Determines if two values are equal using the SameValueZero algorithm.
-* `Array.isArray()` - Checks if an argument is an array.
 
