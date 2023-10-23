@@ -32,7 +32,7 @@ This Map class is an implementation of the JavaScript built-in Map object.
 * `filter()`   Filters the elements of a Map object based on a provided callback function.
 * `find()`     Finds the first element in the map that satisfies the provided testing function.
 * `findKey()`  Find the key that satisfies the given condition in the map.
-* `from()`     Adds elements to the map from an iterable.
+* `from()`     Creates a new Map by applying a mapping function to the elements of an iterable object.
 * `includes()` Checks if the map instance includes a specific element.
 * `isEmpty()`  Determines whether the given parameter is an empty Map.
 * `isMap()`    Checks if an object is a Map.
