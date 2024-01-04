@@ -26,8 +26,8 @@
  * - values()   - Returns a new iterator object that contains the values in the map.
 
  * Non-standardethods:
- * TODO: deleteAll()    - Deletes elements defined by keys as parameters from the map.
- * TODO: deleteEach()   - Deletes elements defined by a callback function from the map.
+ * - deleteAll()    - Deletes elements defined by keys as parameters from the map.
+ * - deleteEach()   - Deletes elements defined by a callback function from the map.
  * - every()        - Iterates over all key-value pairs in the map and applies the given function to each pair.
  * - filter()       - Filters the elements of a Map object based on a provided callback function.
  * - find()         - Finds the first element in the map that satisfies the provided testing function.
@@ -39,10 +39,9 @@
  * - keyOf()        - Returns the first key associated with the specified search element in the map.
  * - mapKeys()      - Maps the keys of the map using a callback function.
  * - mapValues()    - Maps each value of the Map object using a callback function.
- * TODO: merge()        - Merges two or more maps into a new map.
+ * - merge()        - Merges two or more maps into a new map.
  * - reduce()       - Reduce the Map to a single value by applying a callback function to each key-value pair.
- * TODO: setAll()       - Adds elements defined as parameters to the map.
- * TODO: setEach()      - Synonym for 'from' 
+ * - setAll()       - Adds elements defined as parameters to the map.
  * - some()         - Executes the provided callback function once for each key-value pair in the Map object.
  * - toArray()      - Returns an array representation of the map.
  * - toString()     - Returns a string representation of the map.
@@ -603,4 +602,88 @@ Map.from = function (iterable, mapFunc, thisArg) {
     }
 
     return result;
+};
+
+/**
+ * Sets multiple key-value pairs in the Map.
+ *
+ * @param {Array} argArr - An array of key-value pairs to be set in the Map.
+ * Each pair should be an array with two elements: [key, value].
+ * @return {Map} - The modified Map object with the new key-value pairs set.
+ */
+Map.prototype.setAll = function (argArr) {
+    if (argArr instanceof Array) {
+        for (var i = 0; i < argArr.length; i++) {
+            var entry = argArr[i];
+            if (entry instanceof Array && entry.length === 2) {
+                this.set(entry[0], entry[1]);
+            };
+        };
+    };
+
+    return this;
+};
+
+/**
+ * Deletes all the specified keys from the map.
+ *
+ * @param {type} key1 - the first key to delete
+ * @param {...} ... - additional keys to delete
+ * @return {Map} - the updated map after deleting the keys
+ */
+Map.prototype.deleteAll = function (key1/*, ..., keyN*/) {
+    for (var i = 0; i < arguments.length; i++) {
+        this.delete(arguments[i]);
+    };
+
+    return this;
+};
+
+/**
+ * Deletes each key-value pair from the map for which the callback function returns true.
+ *
+ * @param {function} callback - The callback function to execute on each key-value pair. The function should return true to delete the pair, or false to keep it.
+ * @param {any} thisArg - Optional. The value to use as `this` when executing the callback function.
+ * @return {Map} - The Map object after deleting the key-value pairs.
+ */
+Map.prototype.deleteEach = function (callback, thisArg) {
+    if (typeof callback !== "function")
+        throw new TypeError("Map.deleteEach(): Missing callback function");
+
+    var iterator = this.entries();
+    var entry = iterator.next();
+
+    while (!entry.done) {
+        var key = entry.value[0];
+        var value = entry.value[1];
+
+        if (callback.call(thisArg, value, key, this)) {
+            this.delete(key, value);
+        }
+        entry = iterator.next();
+    }
+
+    return this;
+};
+
+/**
+ * Merges the current map with another map.
+ *
+ * @param {Map} otherMap - The map to merge with the current map.
+ * @throws {TypeError} Throws a TypeError if `otherMap` is not an instance of Map.
+ * @return {Map} Returns the current map after merging.
+ */
+Map.prototype.merge = function (otherMap) { //
+    if (!(otherMap instanceof Map)) {
+        throw new TypeError(otherMap + " is not a Map instance.");
+    };
+
+    var iterator = otherMap.entries();
+    var entry = iterator.next();
+    while (!entry.done) {
+        this.set(entry.value[0], entry.value[1]);
+        entry = iterator.next();
+    }
+
+    return this;
 };
