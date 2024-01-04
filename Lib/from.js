@@ -6,37 +6,33 @@
  * @param {Object} thisArg - The value to use as `this` when executing the map function.
  * @return {Map} A new Map object containing the mapped key-value pairs.
  */
-Map.from = function (iterable, mapFunc, thisArg) { // Bing refactor
-    if (iterable == null || typeof iterable !== 'object') {
+Map.from = function (iterable, mapFunc, thisArg) {
+    if (!iterable || typeof iterable !== 'object') {
         throw new TypeError(iterable + " is not an object.");
     }
 
     mapFunc = mapFunc || function (item) { return item; };
 
     var result = new Map();
-    var entry, elem;
+    var processEntry = function (entry) {
+        var elem = mapFunc.call(thisArg, entry);
+        result.set(elem[0], elem[1]);
+    };
 
     if (iterable instanceof Array) {
-        for (var i = 0; i < iterable.length; i++) {
-            entry = iterable[i];
-            if (entry instanceof Array) {
-                elem = mapFunc.call(thisArg, entry, i);
-                result.set(elem[0], elem[1]);
+        iterable.forEach(function (item, index) {
+            if (item instanceof Array) {
+                processEntry(item);
             }
-        }
+        });
     } else if (iterable instanceof Map) {
-        var iterator = iterable.entries();
-        entry = iterator.next();
-        while (!entry.done) {
-            elem = mapFunc.call(thisArg, [entry.value[0], entry.value[1]]);
-            result.set(elem[0], elem[1]);
-            entry = iterator.next();
-        }
+        iterable.forEach(function (value, key) {
+            processEntry([key, value]);
+        });
     } else {
         for (var key in iterable) {
             if (iterable.hasOwnProperty(key)) {
-                elem = mapFunc.call(thisArg, [key, iterable[key]]);
-                result.set(elem[0], elem[1]);
+                processEntry([key, iterable[key]]);
             }
         }
     }

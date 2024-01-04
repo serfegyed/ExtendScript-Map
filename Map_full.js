@@ -26,21 +26,27 @@
  * - values()   - Returns a new iterator object that contains the values in the map.
 
  * Non-standardethods:
- * - every()    - Iterates over all key-value pairs in the map and applies the given function to each pair.
- * - filter()   - Filters the elements of a Map object based on a provided callback function.
- * - find()     - Finds the first element in the map that satisfies the provided testing function.
- * - findKey()  - Find the key that satisfies the given condition in the map.
- * - from()     - Creates a new Map by applying a mapping function to the elements of an iterable object.
- * - includes() - Checks if the map instance includes a specific element.
- * - isEmpty()  - Determines whether the given parameter is an empty Map.
- * - isMap()    - Checks if an object is a Map.
- * - keyOf()    - Returns the first key associated with the specified search element in the map.
- * - mapKeys()  - Maps the keys of the map using a callback function.
- * - mapValues()- Maps each value of the Map object using a callback function.
- * - reduce()   - Reduce the Map to a single value by applying a callback function to each key-value pair.
- * - some()     - Executes the provided callback function once for each key-value pair in the Map object.
- * - toArray()  - Returns an array representation of the map.
- * - toString() - Returns a string representation of the map.
+ * TODO: deleteAll()    - Deletes elements defined by keys as parameters from the map.
+ * TODO: deleteEach()   - Deletes elements defined by a callback function from the map.
+ * - every()        - Iterates over all key-value pairs in the map and applies the given function to each pair.
+ * - filter()       - Filters the elements of a Map object based on a provided callback function.
+ * - find()         - Finds the first element in the map that satisfies the provided testing function.
+ * - findKey()      - Find the key that satisfies the given condition in the map.
+ * - from()         - Creates a new Map by applying a mapping function to the elements of an iterable object.
+ * - includes()     - Checks if the map instance includes a specific element.
+ * - isEmpty()      - Determines whether the given parameter is an empty Map.
+ * - isMap()        - Checks if an object is a Map.
+ * - keyOf()        - Returns the first key associated with the specified search element in the map.
+ * - mapKeys()      - Maps the keys of the map using a callback function.
+ * - mapValues()    - Maps each value of the Map object using a callback function.
+ * TODO: merge()        - Merges two or more maps into a new map.
+ * - reduce()       - Reduce the Map to a single value by applying a callback function to each key-value pair.
+ * TODO: setAll()       - Adds elements defined as parameters to the map.
+ * TODO: setEach()      - Synonym for 'from' 
+ * - some()         - Executes the provided callback function once for each key-value pair in the Map object.
+ * - toArray()      - Returns an array representation of the map.
+ * - toString()     - Returns a string representation of the map.
+ * TODO: update()       - Updates a map with key/value pairs defined as parameters.
  * 
  * @external:   sameValueZero()
  * 
@@ -565,37 +571,33 @@ Map.prototype.reduce = function (callback, initialValue) {
  * @param {Object} thisArg - The value to use as `this` when executing the map function.
  * @return {Map} A new Map object containing the mapped key-value pairs.
  */
-Map.from = function (iterable, mapFunc, thisArg) { // Bing refactor
-    if (iterable == null || typeof iterable !== 'object') {
+Map.from = function (iterable, mapFunc, thisArg) {
+    if (!iterable || typeof iterable !== 'object') {
         throw new TypeError(iterable + " is not an object.");
     }
 
     mapFunc = mapFunc || function (item) { return item; };
 
     var result = new Map();
-    var entry, elem;
+    var processEntry = function (entry) {
+        var elem = mapFunc.call(thisArg, entry);
+        result.set(elem[0], elem[1]);
+    };
 
     if (iterable instanceof Array) {
-        for (var i = 0; i < iterable.length; i++) {
-            entry = iterable[i];
-            if (entry instanceof Array) {
-                elem = mapFunc.call(thisArg, entry, i);
-                result.set(elem[0], elem[1]);
+        iterable.forEach(function (item, index) {
+            if (item instanceof Array) {
+                processEntry(item);
             }
-        }
+        });
     } else if (iterable instanceof Map) {
-        var iterator = iterable.entries();
-        entry = iterator.next();
-        while (!entry.done) {
-            elem = mapFunc.call(thisArg, [entry.value[0], entry.value[1]]);
-            result.set(elem[0], elem[1]);
-            entry = iterator.next();
-        }
+        iterable.forEach(function (value, key) {
+            processEntry([key, value]);
+        });
     } else {
         for (var key in iterable) {
             if (iterable.hasOwnProperty(key)) {
-                elem = mapFunc.call(thisArg, [key, iterable[key]]);
-                result.set(elem[0], elem[1]);
+                processEntry([key, iterable[key]]);
             }
         }
     }
