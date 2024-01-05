@@ -625,6 +625,35 @@ Map.prototype.setAll = function (argArr) {
 };
 
 /**
+ * Sets each element in the given array as key-value pairs in the Map object, 
+ * based on the result of the callback function.
+ * 
+ * @param {Array} argArr - The array containing the elements to be added to the Map object.
+ * @param {Function} callback - The function to execute on each element in the array.
+ * @param {Object} thisArg - Optional. The value to use as 'this' when executing the callback function.
+ * @throws {TypeError} - If argArr is not an instance of Array or if callback is not a function.
+ * @return {Map} - The updated Map object.
+ */
+Map.prototype.setEach = function (argArr, callback, thisArg) {
+    if (!(argArr instanceof Array))
+        throw new TypeError("Map.setEach(): Need array to add elements");
+
+    if (typeof callback !== "function")
+        throw new TypeError("Map.setEach(): Missing callback function");
+
+    for (var i = 0; i < argArr.length; i++) {
+        var entry = argArr[i];
+        if (entry instanceof Array && entry.length === 2) {
+            if (callback.call(thisArg, entry[1], entry[0], this)) {
+                this.set(entry[0], entry[1]);
+            }
+        };
+    };
+
+    return this;
+};
+
+/**
  * Deletes all the specified keys from the map.
  *
  * @param {type} key1 - the first key to delete
@@ -650,18 +679,11 @@ Map.prototype.deleteEach = function (callback, thisArg) {
     if (typeof callback !== "function")
         throw new TypeError("Map.deleteEach(): Missing callback function");
 
-    var iterator = this.entries();
-    var entry = iterator.next();
-
-    while (!entry.done) {
-        var key = entry.value[0];
-        var value = entry.value[1];
-
-        if (callback.call(thisArg, value, key, this)) {
-            this.delete(key, value);
-        }
-        entry = iterator.next();
-    }
+    for (key in this._data) {
+        if (callback.call(thisArg, this._data[key], key, this)) {
+            this.delete(key);
+        };
+    };
 
     return this;
 };
@@ -687,3 +709,4 @@ Map.prototype.merge = function (otherMap) { //
 
     return this;
 };
+

@@ -9,18 +9,11 @@ Map.prototype.deleteEach = function (callback, thisArg) {
     if (typeof callback !== "function")
         throw new TypeError("Map.deleteEach(): Missing callback function");
 
-    var iterator = this.entries();
-    var entry = iterator.next();
-
-    while (!entry.done) {
-        var key = entry.value[0];
-        var value = entry.value[1];
-
-        if (callback.call(thisArg, value, key, this)) {
-            this.delete(key, value);
-        }
-        entry = iterator.next();
-    }
+    for (key in this._data) {
+        if (callback.call(thisArg, this._data[key], key, this)) {
+            this.delete(key);
+        };
+    };
 
     return this;
 };
