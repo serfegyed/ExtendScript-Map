@@ -44,6 +44,7 @@ This Map class is an implementation of the JavaScript built-in Map object.
 * `merge()`      Merges two or more maps into a new map.
 * `reduce()`     Reduce the Map to a single value by applying a callback function to each key-value pair.
 * `setAll()`     Adds elements defined as parameters to the map.
+* `setEach()`    Adds elements defined array as key-value pairs based on the result of the callback function.
 * `some()`       Executes the provided callback function once for each key-value pair in the Map object.
 * `toArray()`    Returns an array representation of the map.
 * `toString()`   Returns a string representation of the map.

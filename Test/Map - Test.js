@@ -27,9 +27,9 @@ $.writeln("myMap3: " + myMap3);
 var myMap = new Map();
 $.writeln("\nTest the 'set' method");
 $.writeln(myMap.set('key1', 'value1').set('key2', 'value2').set('key3', null));
-$.writeln(myMap.size); // Output: 3
+$.writeln(myMap.size()); // Output: 3
 $.writeln(myMap.set('key1', 'value4').set('key4', Infinity).set('key5', NaN).set('key6', null).set('key7', undefined));
-$.writeln(myMap.size); // Output: 7
+$.writeln(myMap.size()); // Output: 7
 
 $.writeln("\nTest the 'includes' method");
 $.writeln(myMap.includes('value4')); // true
@@ -55,11 +55,11 @@ $.writeln("\nTest the 'delete' method");
 $.writeln(myMap.delete('key1')); // true
 $.writeln(myMap.delete('key1')); // false
 $.writeln(myMap.toString())
-$.writeln(myMap.size); // Output: 2
+$.writeln(myMap.size()); // Output: 2
 
 $.writeln("\nTest the 'clear' method");
 $.writeln(myMap.clear()); // Output: undefined
-$.writeln(myMap.size); // Output: 0
+$.writeln(myMap.size()); // Output: 0
 
 // Adding to map again
 myMap.set('key1', 'value1').set('key2', 'value2').set('key3', 'value3');

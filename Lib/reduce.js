@@ -16,7 +16,7 @@ Map.prototype.reduce = function (callback, initialValue) {
     if (typeof callback !== "function")
         throw new TypeError("Map.reduce(): Callback must be a function");
 
-    if (this.size === 0 && initialValue === undefined)
+    if (this.size() === 0 && initialValue === undefined)
         throw new TypeError("Map.reduce(): Empty Map without an initial value");
 
     var iterator = this.entries();

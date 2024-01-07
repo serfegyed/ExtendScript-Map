@@ -38,4 +38,4 @@ map = new Map();
 newMap = map.mapKeys(function (key) {
     return key;
 });
-$.writeln(newMap.size); // 0
+$.writeln(newMap.size()); // 0

@@ -34,7 +34,7 @@ $.writeln(myMap.get(1) === 3); // Expected output: true
 var myMap = new Map();
 var emptyArr = [];
 $.writeln("\nTest 4: " + myMap.from(emptyArr));	// Test 4: {}
-$.writeln(myMap.size); // Expected output: 0
+$.writeln(myMap.size()); // Expected output: 0
 
 // Test case 5: Iterable with invalid entries
 var myMap = new Map();

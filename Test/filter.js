@@ -11,7 +11,7 @@ var filteredMap = map.filter(function (value, key) {
 });
 
 $.writeln("\n" + filteredMap.toString()); // {{b=>2}, {c=>3}}
-$.writeln(filteredMap.size); // 2
+$.writeln(filteredMap.size()); // 2
 $.writeln(filteredMap.get('a')); // undefined
 $.writeln(filteredMap.get('b')); // 2
 $.writeln(filteredMap.get('c')); // 3
@@ -21,7 +21,7 @@ filteredMap = map.filter(function (value, key) {
 });
 
 $.writeln("\n" + filteredMap.toString()); // {{a=>1}}
-$.writeln(filteredMap.size); // 1
+$.writeln(filteredMap.size()); // 1
 $.writeln(filteredMap.get('a')); // 1
 $.writeln(filteredMap.get('b')); // undefined
 $.writeln(filteredMap.get('c')); // undefined
@@ -31,7 +31,7 @@ filteredMap = map.filter(function (value, key) {
 });
 
 $.writeln("\n" + filteredMap.toString()); // {{a=>1}, {c=>3}}
-$.writeln(filteredMap.size); // 2
+$.writeln(filteredMap.size()); // 2
 $.writeln(filteredMap.get('a')); // 1
 $.writeln(filteredMap.get('b')); // undefined
 $.writeln(filteredMap.get('c')); // 3

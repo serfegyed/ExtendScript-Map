@@ -45,7 +45,6 @@
  * - some()         - Executes the provided callback function once for each key-value pair in the Map object.
  * - toArray()      - Returns an array representation of the map.
  * - toString()     - Returns a string representation of the map.
- * TODO: update()       - Updates a map with key/value pairs defined as parameters.
  * 
  * @external:   sameValueZero()
  * 
@@ -59,9 +58,22 @@
  * @author Egyed Serf
  * @license MIT
  */
+Array.from = function (arrayLike /*, mapFn, thisArg*/) {
+    var result = [];
+    var length = arrayLike.length;
+    var mapFunction = arguments[1] || function (x) {
+        return x;
+    };
+    var thisArg = arguments[2] || undefined;
+    for (var i = 0; i < length; i++) {
+        result.push(mapFunction.call(thisArg, arrayLike[i], i));
+    }
+    return result;
+};
+
 function Map(iterable) {
     this._data = {};
-    this.size = 0;
+    this._size = 0;
 
     if (iterable instanceof Array) {
         for (var i = 0; i < iterable.length; i++) {
@@ -92,7 +104,7 @@ Map.isMap = function (obj) {
  */
 Map.isEmpty = function (obj) {
     if (!Map.isMap(obj)) throw new TypeError(obj.toString() + " is not a Map");
-    return obj.size === 0;
+    return obj.size() === 0;
 };
 
 /**
@@ -103,7 +115,7 @@ Map.isEmpty = function (obj) {
  */
 Map.prototype.set = function (key, value) {
     if (!this.has(key)) {
-        this.size++;
+        this._size++;
     }
     this._data[key] = value;
     return this;
@@ -137,7 +149,7 @@ Map.prototype.has = function (key) {
 Map.prototype.delete = function (key) {
     if (this.has(key)) {
         delete this._data[key];
-        this.size--;
+        this._size--;
         return true;
     } else {
         return false;
@@ -150,7 +162,16 @@ Map.prototype.delete = function (key) {
  */
 Map.prototype.clear = function () {
     this._data = {};
-    this.size = 0;
+    this._size = 0;
+};
+
+/**
+ * Returns the size of the Map object.
+ *
+ * @return {number} The number of key/value pairs in the Map object.
+ */
+Map.prototype.size = function () {
+    return this._size;
 };
 
 /**
@@ -537,7 +558,7 @@ Map.prototype.reduce = function (callback, initialValue) {
     if (typeof callback !== "function")
         throw new TypeError("Map.reduce(): Callback must be a function");
 
-    if (this.size === 0 && initialValue === undefined)
+    if (this.size() === 0 && initialValue === undefined)
         throw new TypeError("Map.reduce(): Empty Map without an initial value");
 
     var iterator = this.entries();
@@ -709,4 +730,3 @@ Map.prototype.merge = function (otherMap) { //
 
     return this;
 };
-
